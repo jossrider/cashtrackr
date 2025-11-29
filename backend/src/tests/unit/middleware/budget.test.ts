@@ -49,7 +49,7 @@ describe('budget middleware - validateBudgetExist', () => {
   })
 })
 
-describe('budget middleware - validateBudgetExist', () => {
+describe('budget middleware - hasAccess', () => {
   it('should call next() if user has access to budget', () => {
     const req = createRequest({
       budget: budgets[0],
@@ -71,5 +71,7 @@ describe('budget middleware - validateBudgetExist', () => {
     const next = jest.fn()
     hasAccess(req, res, next)
     expect(next).not.toHaveBeenCalled()
+    expect(res.statusCode).toBe(401)
+    expect(res._getJSONData()).toEqual({ error: 'Acción no válida!' })
   })
 })

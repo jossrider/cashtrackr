@@ -13,7 +13,7 @@ router.post(
   '/create-account',
   body('name').notEmpty().withMessage('El nombre no puede ir vacio!!'),
   body('password').isLength({ min: 8 }).withMessage('El password es muy corto, mínimo 8 caracteres!!'),
-  body('email').isEmail().withMessage('Email np válido!!'),
+  body('email').isEmail().withMessage('Email no válido!!'),
   handleInputErrors,
   AuthController.createAccount
 )

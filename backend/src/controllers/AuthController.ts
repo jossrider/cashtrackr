@@ -15,12 +15,12 @@ export class AuthController {
       return res.status(409).json({ error: error.message })
     }
     try {
-      const user = new User(req.body)
+      const user = await User.create(req.body)
       user.password = await hashPassword(user.password)
       user.token = generateToken()
       await user.save()
       await AuthEmail.sendConfirmationEmail({ name: user.name, email: user.email, token: user.token })
-      res.json('Cuenta creada corecctamente!!')
+      res.status(201).json('Cuenta creada corecctamente!!')
     } catch (error) {
       // console.log(error)
       res.status(500).json({ error: 'Hubo un error!!' })
@@ -116,7 +116,7 @@ export class AuthController {
     await user.save()
     res.json('Password actualizado correctamente!!')
   }
-  
+
   static checkPassword = async (req: Request, res: Response) => {
     const { password } = req.body
     const { id } = req.user
