@@ -9,10 +9,10 @@ export async function connectDB() {
   try {
     await db.authenticate()
     await db.sync()
-    console.log(colors.blue.bold('BD conectada exitosamente!!'))
+    // console.log(colors.blue.bold('BD conectada exitosamente!!'))
   } catch (error) {
     // console.log(error)
-    console.log(colors.red.bold('Error al conectar a la BD!!'))
+    // console.log(colors.red.bold('Error al conectar a la BD!!'))
   }
 }
 

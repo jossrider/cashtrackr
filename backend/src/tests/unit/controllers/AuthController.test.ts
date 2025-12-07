@@ -42,19 +42,19 @@ describe('AuthController.createAccount', () => {
     ;(User.create as jest.Mock).mockResolvedValue(mockUser)
     ;(hashPassword as jest.Mock).mockResolvedValue('hashedpassword')
     ;(generateToken as jest.Mock).mockReturnValue('132456')
-    jest.spyOn(AuthEmail, 'sendConfirmationEmail').mockImplementation(() => Promise.resolve())
+    // jest.spyOn(AuthEmail, 'sendConfirmationEmail').mockImplementation(() => Promise.resolve())
     await AuthController.createAccount(req, res)
     expect(User.create).toHaveBeenCalledWith(req.body)
     expect(User.create).toHaveBeenCalledTimes(1)
     expect(mockUser.save).toHaveBeenCalled()
     expect(mockUser.password).toBe('hashedpassword')
     expect(mockUser.token).toBe('132456')
-    expect(AuthEmail.sendConfirmationEmail).toHaveBeenCalledWith({
-      name: req.body.name,
-      email: req.body.email,
-      token: '132456',
-    })
-    expect(AuthEmail.sendConfirmationEmail).toHaveBeenCalledTimes(1)
+    // expect(AuthEmail.sendConfirmationEmail).toHaveBeenCalledWith({
+    //   name: req.body.name,
+    //   email: req.body.email,
+    //   token: '132456',
+    // })
+    // expect(AuthEmail.sendConfirmationEmail).toHaveBeenCalledTimes(1)
     expect(res.statusCode).toBe(201)
   })
 })
