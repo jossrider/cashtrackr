@@ -51,3 +51,11 @@ export const validateExpenseExist = async (req: Request, res: Response, next: Ne
     res.status(500).json({ error: 'Hubo un error!!' })
   }
 }
+
+export const belognsToBudget = async (req: Request, res: Response, next: NextFunction) => {
+  if (req.budget.id !== req.expense.budgetId) {
+    const error = new Error('Acción no válida!!')
+    return res.status(403).json({ error: error.message })
+  }
+  next()
+}

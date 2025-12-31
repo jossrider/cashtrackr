@@ -53,6 +53,15 @@ router.post(
 
 router.get('/user', authenticate, AuthController.user)
 
+router.put(
+  '/user',
+  authenticate,
+  body('name').notEmpty().withMessage('El nombre es obligatorio!!'),
+  body('email').isEmail().withMessage('Email no válido!!'),
+  handleInputErrors,
+  AuthController.updateUser
+)
+
 router.post(
   '/update-password',
   authenticate,

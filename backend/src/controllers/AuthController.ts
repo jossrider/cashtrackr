@@ -2,7 +2,7 @@ import { type Request, type Response } from 'express'
 import User from '../models/User'
 import { checkPassword, hashPassword } from '../utils/auth'
 import { generateToken } from '../utils/token'
-import { AuthEmail } from '../emails/AuthEmails'
+// import { AuthEmail } from '../emails/AuthEmails'
 import { generateJWT } from '../utils/jwt'
 
 export class AuthController {
@@ -73,7 +73,7 @@ export class AuthController {
     }
     user.token = generateToken()
     await user.save()
-    await AuthEmail.sendPasswordResetToken({ email: user.email, name: user.name, token: user.token })
+    // await AuthEmail.sendPasswordResetToken({ email: user.email, name: user.name, token: user.token })
     res.json('Revisa tu email para instrucciones!')
   }
 
@@ -84,7 +84,7 @@ export class AuthController {
       const error = new Error('Token no válido!!')
       return res.status(404).json({ error: error.message })
     }
-    res.json('Token válido!!')
+    res.json('Token válido, asigna un nuevo password!!')
   }
 
   static resetPasswordWithToken = async (req: Request, res: Response) => {
@@ -131,5 +131,23 @@ export class AuthController {
       return res.status(401).json({ error: error.message })
     }
     res.json('Password correcto!!')
+  }
+
+  static updateUser = async (req: Request, res: Response) => {
+    const { name, email } = req.body
+    const user = req.user
+    try {
+      // verificar email
+      const userExist = await User.findOne({ where: { email } })
+      if (userExist && user.id !== userExist.id) {
+        const error = new Error('Un usuario con ese email ya existe!!')
+        return res.status(409).json({ error: error.message })
+      }
+      await User.update({ email, name }, { where: { id: user.id } })
+    } catch (error) {
+      // console.log(error)
+      res.status(500).json({ error: 'Hubo un error!!' })
+    }
+    res.json('Perfil actualizado!!')
   }
 }
